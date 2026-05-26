@@ -32,7 +32,7 @@ To build and run this project, you need a C compiler installed on your system:
 - **macOS**: Xcode Command Line Tools (`clang`)
 - **Linux**: GCC (`sudo apt install build-essential`)
 
-### Installation & Compilation
+### Installation and Compilation
 
 1. **Clone or Download the Repository**
    ```bash
@@ -40,13 +40,13 @@ To build and run this project, you need a C compiler installed on your system:
    cd cinema-booking-system
    ```
 
-2. **Compile the Code**
+2. **Compiling the Code**
    Use `gcc` to compile the source code file (e.g., `main.c`):
    ```bash
    gcc main.c -o cinema_system
    ```
 
-3. **Run the Application**
+3. **Running the Application**
    - **Linux/macOS**:
      ```bash
      ./cinema_system
