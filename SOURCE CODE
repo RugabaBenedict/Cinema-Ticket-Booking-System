@@ -181,7 +181,7 @@ void book_tickets()
 			if (selected_movie->seats[i] == 0)
 				printf("%d ", i + 1);
 			else
-				printf("[X] ");
+				printf("[X]");
 		}
 		printf("]\n");
 
