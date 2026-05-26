@@ -6,7 +6,6 @@
 #define MAX_MOVIES 3
 #define MAX_BOOKINGS 100
 
-
 // Pricing Constants
 #define PRICE_CHILD 5.0
 #define PRICE_STUDENT 8.0
