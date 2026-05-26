@@ -402,5 +402,5 @@ void generate_summary()
 	printf("Total Aggregate Gross Sales: $%.2f\n", overall_sales);
 	printf("=============================================\n");
 
-    
+
 }
