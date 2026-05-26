@@ -284,7 +284,7 @@ void update_booking()
 			if (new_seat < 1 || new_seat > MAX_SEATS || (mov->seats[new_seat - 1] == 1 && new_seat != bookings[i].seat_number))
 			{
 				printf("Update Failed: Seat is invalid or already occupied.\n");
-				return;
+				return 0;
 			}
 
 			// Free previous seat, allocate new one
