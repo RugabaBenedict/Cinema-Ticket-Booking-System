@@ -17,7 +17,7 @@ A lightweight, terminal-based Cinema Ticket Booking System written in **C**. Thi
 
 ## 🚀 Preinstalled Movies
 
-The system already has three pre-configured viewing tracks, capped at **20 seats** each:
+The system already has three pre-configured movies, capped at **20 seats** each:
 1. `Sci-Fi Odyssey`
 2. `The Midnight Mystery`
 3. `Animated Adventures`
