@@ -1,407 +1,94 @@
-# Cinema-Ticket-Booking-System
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#  Cinema Ticket Booking System
 
-#define MAX_SEATS 20
-#define MAX_MOVIES 3
-#define MAX_BOOKINGS 100
+A lightweight, terminal-based Cinema Ticket Booking System written in **C**. This application manages movie options, seat allocations, real-time ticket transactions, pricing rules, and sales analytics through an interactive command-line interface.
 
-// Pricing Constants
-#define PRICE_CHILD 5.0
-#define PRICE_STUDENT 8.0
-#define PRICE_ADULT 12.0
-#define WEEKEND_SURCHARGE 0.20	 // 20% extra
-#define GROUP_DISCOUNT_LIMIT 3	 // 3 or more tickets get a discount
-#define GROUP_DISCOUNT_RATE 0.10 // 10% discount
+## ✨ Features
 
-typedef struct
-{
-	int id;
-	char title[50];
-	int seats[MAX_SEATS]; // 0 = Available, 1 = Booked
-	int tickets_sold;
-	float total_sales;
-} Movie;
+- **Interactive Menu**: Easy terminal-based navigation for bookings, searches, updates, and reports.
+- **Seat Map Matrix**: Live visual seat map (`[1]`, `[2]`, `[X]`) updated instantly after every transaction to prevent double-booking.
+- **Advanced Dynamic Pricing**:
+  - **Age Tiers**: Automatic calculations for Child ($5.00), Student ($8.00), and Adult ($12.00).
+  - **Weekend Surcharge**: Automatically appends a 20% premium fee for weekend shows.
+  - **Group Discount**: Automatically applies a 10% discount for orders of 3 or more tickets.
+- **Complete Booking Lifecycle**: Full support to Book, Search, Update (change seats), and Cancel/Delete reservations.
+- **Analytics & Summaries**: Identifies the trending "Most Booked Movie" and prints total financial sales/inventory metrics.
 
-typedef struct
-{
-	int booking_id;
-	char customer_name[50];
-	int movie_id;
-	int seat_number;
-	char customer_type; // 'C' = Child, 'S' = Student, 'A' = Adult
-	int is_weekend;		// 1 = Yes, 0 = No
-	float final_price;
-} Booking;
+---
 
-// Global variables to track state
-Movie movies[MAX_MOVIES];
-Booking bookings[MAX_BOOKINGS];
-int booking_count = 0;
-int next_booking_id = 1001;
+## 🚀 Preinstalled Movies
 
-// Function Prototypes
-void init_system();
-void display_menu();
-void book_tickets();
-void search_booking();
-void update_booking();
-void cancel_booking();
-void display_available_seats();
-void identify_most_booked();
-void generate_summary();
+The system already has three pre-configured viewing tracks, capped at **20 seats** each:
+1. `Sci-Fi Odyssey`
+2. `The Midnight Mystery`
+3. `Animated Adventures`
 
-int main()
-{
-	init_system();
-	int choice;
+---
 
-	while (1)
-	{
-		display_menu();
-		printf("Enter your choice: ");
-		if (scanf("%d", &choice) != 1)
-		{
-			printf("Invalid input. Exiting.\n");
-			break;
-		}
+## 🛠️ Getting Started
 
-		switch (choice)
-		{
-		case 1:
-			book_tickets();
-			break;
-		case 2:
-			search_booking();
-			break;
-		case 3:
-			update_booking();
-			break;
-		case 4:
-			cancel_booking();
-			break;
-		case 5:
-			display_available_seats();
-			break;
-		case 6:
-			identify_most_booked();
-			break;
-		case 7:
-			generate_summary();
-			break;
-		case 8:
-			printf("Exiting system. Goodbye!\n");
-			exit(0);
-		default:
-			printf("Invalid choice! Please select between 1 and 8.\n");
-		}
-	}
-	return 0;
-}
+### What i Used to build the program
+To build and run this project, you need a C compiler installed on your system:
+- **Windows**: MinGW or GCC via MSYS2
+- **macOS**: Xcode Command Line Tools (`clang`)
+- **Linux**: GCC (`sudo apt install build-essential`)
 
-void init_system()
-{
-	// Initialize standard movie options
-	movies[0] = (Movie){1, "Sci-Fi Odyssey", {0}, 0, 0.0};
-	movies[1] = (Movie){2, "The Midnight Mystery", {0}, 0, 0.0};
-	movies[2] = (Movie){3, "Animated Adventures", {0}, 0, 0.0};
-}
+### Installation & Compilation
 
-void display_menu()
-{
-	printf("\n=============================================\n");
-	printf("     CINEMA TICKET BOOKING SYSTEM MENU       \n");
-	printf("=============================================\n");
-	printf("1. Book Tickets (Register & Select Seats)\n");
-	printf("2. Search Bookings\n");
-	printf("3. Update Booking Details\n");
-	printf("4. Cancel/Delete Booking\n");
-	printf("5. Display Available Seats\n");
-	printf("6. Identify Most Booked Movie\n");
-	printf("7. Generate Booking Summary & Sales\n");
-	printf("8. Exit\n");
-	printf("=============================================\n");
-}
+1. **Clone or Download the Repository**
+   ```bash
+   git clone https://github.com
+   cd cinema-booking-system
+   ```
 
-void book_tickets()
-{
-	printf("\n--- Book Tickets ---\n");
-	printf("Select a Movie:\n");
-	for (int i = 0; i < MAX_MOVIES; i++)
-	{
-		printf("%d. %s\n", movies[i].id, movies[i].title);
-	}
+2. **Compile the Code**
+   Use `gcc` to compile the source code file (e.g., `main.c`):
+   ```bash
+   gcc main.c -o cinema_system
+   ```
 
-	int movie_choice;
-	printf("Enter Movie ID (1-%d): ", MAX_MOVIES);
-	scanf("%d", &movie_choice);
+3. **Run the Application**
+   - **Linux/macOS**:
+     ```bash
+     ./cinema_system
+     ```
+   - **Windows**:
+     ```bash
+     cinema_system.exe
+     ```
 
-	if (movie_choice < 1 || movie_choice > MAX_MOVIES)
-	{
-		printf("Invalid Movie ID!\n");
-		return;
-	}
+---
 
-	Movie *selected_movie = &movies[movie_choice - 1];
+## 📋 System Menu Overview
 
-	// Rule: If the cinema hall is full, reject new bookings
-	if (selected_movie->tickets_sold >= MAX_SEATS)
-	{
-		printf("Booking Rejected: Cinema hall for '%s' is completely full!\n", selected_movie->title);
-		return;
-	}
+When you run the system, you will see the following functional tracks:
 
-	char name[50];
-	printf("Enter Customer Name: ");
-	scanf(" %[^\n]s", name);
+```text
+=============================================
+     CINEMA TICKET BOOKING SYSTEM MENU       
+=============================================
+1. Book Tickets (Register & Select Seats)
+2. Search Bookings
+3. Update Booking Details
+4. Cancel/Delete Booking
+5. Display Available Seats
+6. Identify Most Booked Movie
+7. Generate Booking Summary & Sales
+8. Exit
+=============================================
+```
 
-	int num_tickets;
-	printf("How many tickets would you like to book? ");
-	scanf("%d", &num_tickets);
+---
 
-	if (num_tickets <= 0 || (selected_movie->tickets_sold + num_tickets) > MAX_SEATS)
-	{
-		printf("Booking Rejected: Not enough seats available. Remaining seats: %d\n", MAX_SEATS - selected_movie->tickets_sold);
-		return;
-	}
+## ⚙️ Data Build up
 
-	int is_wknd;
-	printf("Is this a weekend show? (1 for Yes, 0 for No): ");
-	scanf("%d", &is_wknd);
+The project builds upon two primary `struct` schemas to manage states inside local memory runtime arrays:
 
-	// Process each ticket in the booking transaction
-	for (int t = 0; t < num_tickets; t++)
-	{
-		printf("\nProcessing Ticket %d of %d:\n", t + 1, num_tickets);
+- **`Movie` Struct**: Keeps track of the title, individual seat states (0 for available, 1 for occupied), ticket counts, and generated revenue.
+- **`Booking` Struct**: Stores customer metadata, allocated unique verification structural IDs (starting at `1001`), customer types (`C`, `S`, `A`), and computed prices.
 
-		// Display current seat status
-		printf("Seat Map: [ ");
-		for (int i = 0; i < MAX_SEATS; i++)
-		{
-			if (selected_movie->seats[i] == 0)
-				printf("%d ", i + 1);
-			else
-				printf("[X] ");
-		}
-		printf("]\n");
+---
 
-		int seat_num;
-		printf("Choose an available seat number (1-%d): ", MAX_SEATS);
-		scanf("%d", &seat_num);
+## 📄 License
 
-		// Rule: A seat should not be booked twice
-		if (seat_num < 1 || seat_num > MAX_SEATS || selected_movie->seats[seat_num - 1] == 1)
-		{
-			printf("Invalid or already occupied seat! Restarting this ticket selection.\n");
-			t--; // Redo loop iteration for this ticket
-			continue;
-		}
+This project is open-source and available under the [MIT License](LICENSE).
 
-		char type;
-		printf("Enter Ticket Type (C for Child, S for Student, A for Adult): ");
-		scanf(" %c", &type);
-
-		// Base Pricing Logic
-		float base_price = 0.0;
-		if (type == 'C' || type == 'c')
-			base_price = PRICE_CHILD;
-		else if (type == 'S' || type == 's')
-			base_price = PRICE_STUDENT;
-		else
-			base_price = PRICE_ADULT;
-
-		// Weekend Surcharge Logic
-		if (is_wknd == 1)
-		{
-			base_price += (base_price * WEEKEND_SURCHARGE);
-		}
-
-		// Group Discount Logic
-		if (num_tickets >= GROUP_DISCOUNT_LIMIT)
-		{
-			base_price -= (base_price * GROUP_DISCOUNT_RATE);
-		}
-
-		// Finalize individual ticket booking
-		selected_movie->seats[seat_num - 1] = 1;
-		selected_movie->tickets_sold++;
-		selected_movie->total_sales += base_price;
-
-		bookings[booking_count] = (Booking){
-			next_booking_id, "", selected_movie->id, seat_num, type, is_wknd, base_price};
-		strcpy(bookings[booking_count].customer_name, name);
-
-		printf("Ticket confirmed! Booking ID: %d | Seat: %d | Price: $%.2f\n",
-			   next_booking_id, seat_num, base_price);
-
-		booking_count++;
-		next_booking_id++;
-	}
-}
-
-void search_booking()
-{
-	printf("\n--- Search Bookings ---\n");
-	char search_name[50];
-	printf("Enter Customer Name to search: ");
-	scanf(" %[^\n]s", search_name);
-
-	int found = 0;
-	for (int i = 0; i < booking_count; i++)
-	{
-		if (strcasecmp(bookings[i].customer_name, search_name) == 0 && bookings[i].booking_id != 0)
-		{
-			printf("Found - ID: %d | Movie: %s | Seat: %d | Price: $%.2f\n",
-				   bookings[i].booking_id,
-				   movies[bookings[i].movie_id - 1].title,
-				   bookings[i].seat_number,
-				   bookings[i].final_price);
-			found = 1;
-		}
-	}
-	if (!found)
-		printf("No active bookings found for '%s'.\n", search_name);
-}
-
-void update_booking()
-{
-	printf("\n--- Update Booking Details ---\n");
-	int target_id;
-	printf("Enter Booking ID to update: ");
-	scanf("%d", &target_id);
-
-	for (int i = 0; i < booking_count; i++)
-	{
-		if (bookings[i].booking_id == target_id)
-		{
-			Movie *mov = &movies[bookings[i].movie_id - 1];
-			int new_seat;
-
-			printf("Current Seat: %d for Movie: %s\n", bookings[i].seat_number, mov->title);
-			printf("Enter new seat number (1-%d): ", MAX_SEATS);
-			scanf("%d", &new_seat);
-
-			if (new_seat < 1 || new_seat > MAX_SEATS || (mov->seats[new_seat - 1] == 1 && new_seat != bookings[i].seat_number))
-			{
-				printf("Update Failed: Seat is invalid or already occupied.\n");
-				return;
-			}
-
-			// Free previous seat, allocate new one
-			mov->seats[bookings[i].seat_number - 1] = 0;
-			mov->seats[new_seat - 1] = 1;
-			bookings[i].seat_number = new_seat;
-
-			printf("Booking updated successfully! New seat assigned: %d\n", new_seat);
-			return;
-		}
-	}
-	printf("Booking ID not found.\n");
-}
-
-void cancel_booking()
-{
-	printf("\n--- Cancel/Delete Booking ---\n");
-	int target_id;
-	printf("Enter Booking ID to cancel: ");
-	scanf("%d", &target_id);
-
-	for (int i = 0; i < booking_count; i++)
-	{
-		if (bookings[i].booking_id == target_id)
-		{
-			Movie *mov = &movies[bookings[i].movie_id - 1];
-
-			// Release assets
-			mov->seats[bookings[i].seat_number - 1] = 0;
-			mov->tickets_sold--;
-			mov->total_sales -= bookings[i].final_price;
-
-			// Flag booking as canceled by wiping its verification ID
-			bookings[i].booking_id = 0;
-
-			printf("Booking ID %d has been successfully canceled and removed.\n", target_id);
-			return;
-		}
-	}
-	printf("Booking ID not found.\n");
-}
-
-void display_available_seats()
-{
-	printf("\n--- Available Seats Availability Matrix ---\n");
-	for (int i = 0; i < MAX_MOVIES; i++)
-	{
-		printf("Movie: %s\nAvailable Seats: ", movies[i].title);
-		int count = 0;
-		for (int j = 0; j < MAX_SEATS; j++)
-		{
-			if (movies[i].seats[j] == 0)
-			{
-				printf("%d ", j + 1);
-				count++;
-			}
-		}
-		if (count == 0)
-			printf("[Fully Booked]");
-		printf("\n\n");
-	}
-}
-
-void identify_most_booked()
-{
-	printf("\n--- Analytics: Popular Demand ---\n");
-	int max_idx = 0;
-	int tie = 0;
-
-	for (int i = 1; i < MAX_MOVIES; i++)
-	{
-		if (movies[i].tickets_sold > movies[max_idx].tickets_sold)
-		{
-			max_idx = i;
-			tie = 0;
-		}
-		else if (movies[i].tickets_sold == movies[max_idx].tickets_sold && movies[i].tickets_sold > 0)
-		{
-			tie = 1;
-		}
-	}
-
-	if (movies[max_idx].tickets_sold == 0)
-	{
-		printf("No tickets have been booked yet across any theater.\n");
-	}
-	else
-	{
-		printf("The most booked movie is: '%s' with %d tickets sold.\n",
-			   movies[max_idx].title, movies[max_idx].tickets_sold);
-		if (tie)
-			printf("Note: There is currently a tie for the top position.\n");
-	}
-}
-
-void generate_summary()
-{
-	printf("\n=============================================\n");
-	printf("          SYSTEM BOOKING SUMMARY             \n");
-	printf("=============================================\n");
-
-	int overall_tickets = 0;
-	float overall_sales = 0.0;
-
-	for (int i = 0; i < MAX_MOVIES; i++)
-	{
-		printf("Movie: %-25s | Tickets Sold: %2d | Sales: $%.2f\n",
-			   movies[i].title, movies[i].tickets_sold, movies[i].total_sales);
-		overall_tickets += movies[i].tickets_sold;
-		overall_sales += movies[i].total_sales;
-	}
-
-	printf("---------------------------------------------\n");
-	printf("Total Tickets Sold Globally: %d\n", overall_tickets);
-	printf("Total Aggregate Gross Sales: $%.2f\n", overall_sales);
-	printf("=============================================\n");
-
-    
-}
