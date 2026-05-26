@@ -1,0 +1,137 @@
+\documentclass[12pt,a4paper]{article}
+
+% Package declarations for formatting, math, and code listings
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+% Code snippet styling configurations
+\definecolor{mGreen}{rgb}{1,0,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{green},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+% Document Metadata
+\title{\textbf{Technical Report on Cinema Ticket Booking System}}
+\author{GROUP F MEMBERS\and
+RUGABA BENEDICT-25/U/BIE/01417/PE\and
+MUKINE JOEL-22/U/BIO/1688/PD\and
+AUGUSTINE CEASER OLOYA-24/U/BIE/03944/PE\and
+NAIWUMBWE ASSUMPTA-24/U/BIE/08557/PE
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This report details the architectural design and technical implementation of a lightweight, terminal-based Cinema Ticket Booking System written in the C programming language. The application acts as a Point of Sale environment managing inventory, client reservations, dynamic tiered pricing structures, and financial auditing metrics.
+
+\section{System Build up and Data Structures}
+The system maintains data state utilizing two main \textit{struct} definitions to control memory allocation arrays without running into pointer or memory leak issues.
+
+\subsection{Movie Section}
+The \textit{Movie} structure manages the current physical seating state, inventory caps, and individual revenue tracking.
+\begin{lstlisting}[caption=Movie Struct Definition]
+typedef struct {
+    int id;
+    char title[50];
+    int seats[20]; // 0 = Available, 1 = Booked
+    int tickets_sold;
+    float total_sales;
+} Movie;
+\end{lstlisting}
+
+\subsection{Booking Section}
+The \textit{Booking} structure archives completed client transaction parameters. to be specific, the program obtains the name, the seat they want and other different parameters.
+\begin{lstlisting}[caption=Booking Struct Definition]
+typedef struct {
+    int booking_id;
+    char customer_name[50];
+    int movie_id;
+    int seat_number;
+    char customer_type; // 'C' = Child, 'S' = Student, 'A' = Adult
+    int is_weekend;     // 1 = Yes, 0 = No
+    float final_price;
+} Booking;
+\end{lstlisting}
+
+\section{The Logic}
+Here we shall see the logic behind the source code.
+
+\subsection{Pricing Parameters}
+Let $P_{base}$ represent the base cost depending on the customer age type $T$:
+\begin{equation}
+P_{base} = 
+\begin{cases}
+\$5.00 & \texttt{if } T = \text{'C' (Child)} \\
+\$8.00 & \texttt{if } T = \text{'S' (Student)} \\
+\$12.00 & \texttt{if } T = \text{'A' (Adult)} 
+\end{cases}
+\end{equation}
+
+\subsection{Surcharge and Group Discounts}
+Let $W$ be the weekend modifier ($W = 0.20$ if weekend, $0$ otherwise), and $D$ be the group bulk discount modifier applied if total grouped tickets $N \ge 3$ ($D = 0.10$, $0$ otherwise). The formula for final single-ticket evaluation $P_{final}$ is modeled as follows:
+\begin{equation}
+P_{final} = (P_{base} + (P_{base} \times W)) \times (1 - D)
+\end{equation}
+
+\section{Functional Matrix Breakdown}
+The application exposes a structured pipeline for running administrative workflows.
+
+\begin{table}[h!]
+\centering
+\caption{System Operations and Runtime Status}
+\begin{tabular}{lll}
+\toprule
+\textbf{Function Call} & \textbf{Operational Scope} & \textbf{Implementation Status} \\
+\midrule
+\texttt{init\_system()} & Bootstraps core catalogs & Complete \\
+\texttt{book\_tickets()} & Registers client data & Complete \\
+\texttt{search\_booking()} & Iterates via client matching tags & Complete \\
+\texttt{update\_booking()} & Swaps seat allocations safely & Complete \\
+\texttt{cancel\_booking()} & Purges records using ID masks & Complete \\
+\texttt{display\_available\_seats()} & Renders matrix layout & Incomplete / Pending \\
+\bottomrule
+\end{tabular}
+\label{tab:functions}
+\end{table}
+
+\section{Conclusion and Future Work}
+In conculsion, the program above depicits the basic cinema ticket booking
+\begin{itemize}
+    \item File I/O serialization to persist memory tables across session resets.
+    \item Fixed size buffer overflow shields (\texttt{\%49[\^{}\textbackslash n]} rules) for input capture safety.
+\end{itemize}
+
+\end{document}
