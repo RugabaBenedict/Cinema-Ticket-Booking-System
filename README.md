@@ -55,7 +55,6 @@ To build and run this project, you need a C compiler installed on your system:
      ```bash
      cinema_system.exe
      ```
-
 ---
 
 ## 📋 System Menu Overview
