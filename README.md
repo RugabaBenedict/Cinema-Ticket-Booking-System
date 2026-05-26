@@ -26,6 +26,7 @@ The system already has three pre-configured movies, capped at **20 seats** each:
 
 ## 🛠️ Getting Started
 
+
 ### What i Used to build the program
 To build and run this project, you need a C compiler installed on your system:
 - **Windows**: MinGW or GCC via MSYS2
