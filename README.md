@@ -1,4 +1,5 @@
 #  Cinema Ticket Booking System
+
 A lightweight, terminal-based Cinema Ticket Booking System written in **C**. This application manages movie options, seat allocations, real-time ticket transactions, pricing rules, and sales analytics through an interactive command-line interface.
 
 ## ✨ Features
