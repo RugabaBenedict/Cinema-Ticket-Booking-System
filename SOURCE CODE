@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 #define MAX_SEATS 20
 #define MAX_MOVIES 3
 #define MAX_BOOKINGS 100
